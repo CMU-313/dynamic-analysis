@@ -23,7 +23,7 @@ class MethodAdapter extends MethodVisitor implements Opcodes {
       // documentation)
       this.visitInsn(Opcodes.DUP);
       // description is in an internal format that is described in the JVM specification
-      this.visitMethodInsn(Opcodes.INVOKESTATIC, "Library", "foo", "(Ljava/lang/Integer;)V", false);
+      this.visitMethodInsn(Opcodes.INVOKESTATIC, "edu/cmu/cs/tot/Library", "foo", "(Ljava/lang/Integer;)V", false);
     }
 
     super.visitMethodInsn(opcode, owner, name, desc, itf);
