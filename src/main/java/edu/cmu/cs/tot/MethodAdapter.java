@@ -23,9 +23,11 @@ class MethodAdapter extends MethodVisitor implements Opcodes {
     // TODO: The current instrumentation produces a StackOverflowError. This error occurs when
     // the application recurses too deeply. Do you see why? In order to avoid the error, you need to
     // add a check to not add this instrumentation code everywhere.
-    this.visitLdcInsn(this.owner + "." + this.name + this.desc);
-    this.visitMethodInsn(Opcodes.INVOKESTATIC, "edu/cmu/cs/tot/Library", "logExecutedMethod",
-        "(Ljava/lang/String;)V", false);
+    if (!this.owner.equals("edu/cmu/cs/tot/Library")) {
+      this.visitLdcInsn(this.owner + "." + this.name + this.desc);
+      this.visitMethodInsn(Opcodes.INVOKESTATIC, "edu/cmu/cs/tot/Library", "logExecutedMethod",
+          "(Ljava/lang/String;)V", false);
+    }
 
     super.visitCode();
   }
@@ -41,8 +43,11 @@ class MethodAdapter extends MethodVisitor implements Opcodes {
   public void visitInsn(int opcode) {
     if (this.owner.equals("edu/cmu/cs/tot/Main") && this.name.equals("main")
         && opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) {
-      // TODO: Your need to print the methods that were executed after running the program. This
-      // check identifies the end of the main method, before the return instruction is executed.
+      this.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+      this.visitMethodInsn(Opcodes.INVOKESTATIC, "edu/cmu/cs/tot/Library", "getExecutedMethods",
+          "()Ljava/util/Set;", false);
+      this.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println",
+          "(Ljava/lang/Object;)V", false);
     }
 
     super.visitInsn(opcode);
