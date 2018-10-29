@@ -32,6 +32,6 @@ class ClassAdapter extends ClassVisitor implements Opcodes {
       final String signature,
       final String[] exceptions) {
     MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-    return mv == null ? null : new MethodAdapter(mv, owner);
+    return mv == null ? null : new MethodAdapter(mv, owner, name, desc);
   }
 }

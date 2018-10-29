@@ -26,10 +26,10 @@ public class InstrumentedClassLoader extends ClassLoader {
   protected synchronized Class<?> loadClass(final String name, final boolean resolve)
       throws ClassNotFoundException {
     if (name.startsWith("java.")) {
-      System.err.println("Adapt: loading class '" + name + "' without on the fly adaptation");
+//      System.err.println("Adapt: loading class '" + name + "' without on the fly adaptation");
       return super.loadClass(name, resolve);
     } else {
-      System.err.println("Adapt: loading class '" + name + "' with on the fly adaptation");
+//      System.err.println("Adapt: loading class '" + name + "' with on the fly adaptation");
     }
 
     // gets an input stream to read the bytecode of the class
