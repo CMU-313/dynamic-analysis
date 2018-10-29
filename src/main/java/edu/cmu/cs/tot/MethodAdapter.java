@@ -19,13 +19,33 @@ class MethodAdapter extends MethodVisitor implements Opcodes {
   @Override
   public void visitCode() {
     System.out.println("Entering method " + this.owner + "." + this.name + this.desc);
+
+    // TODO: The current instrumentation produces a StackOverflowError. This error occurs when
+    // the application recurses too deeply. Do you see why? In order to avoid the error, you need to
+    // add a check to not add this instrumentation code everywhere.
+    this.visitLdcInsn(this.owner + "." + this.name + this.desc);
+    this.visitMethodInsn(Opcodes.INVOKESTATIC, "edu/cmu/cs/tot/Library", "logExecutedMethod",
+        "(Ljava/lang/String;)V", false);
+
     super.visitCode();
   }
 
   @Override
   public void visitEnd() {
     System.out.println("Exiting method " + this.owner + "." + this.name + this.desc);
+
     super.visitEnd();
+  }
+
+  @Override
+  public void visitInsn(int opcode) {
+    if (this.owner.equals("edu/cmu/cs/tot/Main") && this.name.equals("main")
+        && opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) {
+      // TODO: Your need to print the methods that were executed after running the program. This
+      // check identifies the end of the main method, before the return instruction is executed.
+    }
+
+    super.visitInsn(opcode);
   }
 
   @Override
